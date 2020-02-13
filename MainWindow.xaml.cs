@@ -11,10 +11,10 @@ namespace voidProApp
     {
         private Boolean visible;
         private Boolean resizable { get; set; }
-        private string Batterystate { get; set; }
         public Timer clock { get; set; }
         private KeyboardHook exitKeyHook { get; set; }
         private KeyboardHook displayKeyHook { get; set; }
+        private BatteryReader batteryReader { get; set; }
 
         public MainWindow()
         {
@@ -26,6 +26,8 @@ namespace voidProApp
             this.clock.Interval = 2000;
             this.clock.Enabled = true;
 
+            this.batteryReader = new BatteryReader();
+
             displayKeyHook = new KeyboardHook(this, VirtualKeyCodes.B, ModifierKeyCodes.Control, 0);
             displayKeyHook.Triggered += displayHotkeyEvent;
 
@@ -36,9 +38,9 @@ namespace voidProApp
         public void onTimerEvent(object source, ElapsedEventArgs e)
         {
             //Console.WriteLine("updated");
-            Batterystate = BatteryReader.getBatteryStatusViaHID();
+            batteryReader.getBatteryStatusViaHID();
             this.Dispatcher.Invoke(()=> {
-                mainLabel.Content = this.Batterystate;
+                mainLabel.Content = batteryReader.currentBatteryStatus;
             });         
         }
 
@@ -49,7 +51,7 @@ namespace voidProApp
         private void displayHotkeyEvent() {
             this.visible = !visible;
             if (this.visible) {
-                this.mainLabel.Content = this.Batterystate;
+                this.mainLabel.Content = batteryReader.currentBatteryStatus;
             }
             VoidProBatteryOverlay.Visibility = this.visible ? Visibility.Visible : Visibility.Hidden; 
         }
@@ -58,7 +60,7 @@ namespace voidProApp
         {
             this.visible = true;
             this.resizable = false;
-            this.mainLabel.Content = this.Batterystate;
+            this.mainLabel.Content = batteryReader.currentBatteryStatus;
         }
 
         private void MainLabel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
