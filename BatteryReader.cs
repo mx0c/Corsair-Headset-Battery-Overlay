@@ -22,12 +22,8 @@ namespace voidProApp
                 {
                     device.OpenDevice();
 
-                    //_device.Inserted += DeviceAttachedHandler;
-                    //_device.Removed += DeviceRemovedHandler;
-                    //_device.MonitorDeviceEvents = true;
-
                     byte[] data_request = { 0xC9, 0x64 };
-                    device.Write(data_request);
+                    device.Write(data_request, 2000);
                     device.ReadReport(OnReport);
 
                     device.CloseDevice();
@@ -52,13 +48,13 @@ namespace voidProApp
                 }
 
                 //If MicUp
-                if (report.Data[2] > VOID_BATTERY_MICUP)
+                if (report.Data[1] > VOID_BATTERY_MICUP)
                 {
-                    currentBatteryStatus = (report.Data[2] - VOID_BATTERY_MICUP).ToString() + "%";
+                    currentBatteryStatus = (report.Data[1] - VOID_BATTERY_MICUP).ToString() + "%";
                     return;
                 }
 
-                currentBatteryStatus = report.Data[2].ToString() + "%";
+                currentBatteryStatus = report.Data[1].ToString() + "%";
             }
             catch { return; }
         }  
