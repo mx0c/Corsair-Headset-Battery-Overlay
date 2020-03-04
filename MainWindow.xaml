@@ -11,7 +11,8 @@
         Topmost="True"
         Loaded="Window_Loaded"
         Name="VoidProBatteryOverlay"
-        ShowInTaskbar="False">
+        ShowInTaskbar="False"
+        Closing="VoidProBatteryOverlay_Closing">
 
         <Viewbox >
             <Label Name="mainLabel" Foreground="Red" MouseLeftButtonDown="MainLabel_MouseLeftButtonDown" MouseDoubleClick="MainLabel_MouseDoubleClick"></Label>

@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Timers;
 using Microsoft.Win32;
+using System.Windows.Controls;
 
 namespace voidProApp
 {
@@ -11,22 +12,16 @@ namespace voidProApp
     {
         private Boolean visible;
         private Boolean resizable { get; set; }
-        public Timer clock { get; set; }
         private KeyboardHook exitKeyHook { get; set; }
         private KeyboardHook displayKeyHook { get; set; }
-        private BatteryReader batteryReader { get; set; }
+        private BatteryReader batteryReader { get; set; }    
 
         public MainWindow()
         {
             InitializeComponent();
             RegisterInStartup(true);
-
-            clock = new Timer();
-            this.clock.Elapsed += new ElapsedEventHandler(onTimerEvent);
-            this.clock.Interval = 2000;
-            this.clock.Enabled = true;
-
-            this.batteryReader = new BatteryReader();
+            this.batteryReader = new BatteryReader(this);
+            batteryReader.getBatteryStatusViaHID();
 
             displayKeyHook = new KeyboardHook(this, VirtualKeyCodes.B, ModifierKeyCodes.Control, 0);
             displayKeyHook.Triggered += displayHotkeyEvent;
@@ -35,32 +30,21 @@ namespace voidProApp
             exitKeyHook.Triggered += exitHotkeyEvent;
         }
 
-        public void onTimerEvent(object source, ElapsedEventArgs e)
-        {
-            //Console.WriteLine("updated");
-            batteryReader.getBatteryStatusViaHID();
-            this.Dispatcher.Invoke(()=> {
-                mainLabel.Content = batteryReader.currentBatteryStatus;
-            });         
-        }
-
         private void exitHotkeyEvent() {
-            System.Windows.Application.Current.Shutdown();
+            Application.Current.Shutdown();
         }
 
         private void displayHotkeyEvent() {
             this.visible = !visible;
-            if (this.visible) {
-                this.mainLabel.Content = batteryReader.currentBatteryStatus;
-            }
             VoidProBatteryOverlay.Visibility = this.visible ? Visibility.Visible : Visibility.Hidden; 
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            this.Left = Properties.Settings.Default.Left;
+            this.Top = Properties.Settings.Default.Top;
             this.visible = true;
             this.resizable = false;
-            this.mainLabel.Content = batteryReader.currentBatteryStatus;
         }
 
         private void MainLabel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -95,6 +79,14 @@ namespace voidProApp
             {
                 registryKey.DeleteValue("VoidProBatteryOverlay");
             }
+        }
+
+        private void VoidProBatteryOverlay_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //save window location
+            Properties.Settings.Default.Left = this.Left;
+            Properties.Settings.Default.Top = this.Top;
+            Properties.Settings.Default.Save();
         }
     }
 }
