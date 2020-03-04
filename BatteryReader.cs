@@ -60,7 +60,7 @@ namespace voidProApp
             string txt;
             try
             {
-                txt = filterValue(Int16.Parse(text)).ToString();
+                txt = filterValue(Int16.Parse(text)).ToString() + "%";
             }
             catch { txt = text; }
 
