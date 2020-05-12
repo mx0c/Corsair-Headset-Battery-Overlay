@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -104,6 +105,7 @@ namespace voidProApp
                 if (report.Data[3] == 0 || report.Data[3] == 4 || report.Data[3] == 5)
                 {
                     setLabelContent("Battery Charging");
+                    this.lastValues = new int?[filterLength];
                     return;
                 }
 
@@ -121,6 +123,7 @@ namespace voidProApp
             finally
             {
                 device.WriteReport(rep);
+                Thread.Sleep(250);
                 device.ReadReport(handleReport);
             }
         }  
