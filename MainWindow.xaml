@@ -4,17 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:voidProApp"
+        Name="VoidProBatteryOverlay"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="300" WindowStyle="None"
+        Title="MainWindow" Height="200" Width="200" WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
         Topmost="True"
         Loaded="Window_Loaded"
-        Name="VoidProBatteryOverlay"
-        ShowInTaskbar="False"
+        ShowInTaskbar="false"
         Closing="VoidProBatteryOverlay_Closing">
-
-        <Viewbox >
-            <Label Name="mainLabel" Foreground="Red" MouseLeftButtonDown="MainLabel_MouseLeftButtonDown" MouseDoubleClick="MainLabel_MouseDoubleClick"></Label>
-        </Viewbox>
-    </Window>
+    <Viewbox>
+        <StackPanel Orientation="Vertical">
+            <Image Name="mainImage" Stretch="Fill" MouseLeftButtonDown="MainImage_MouseLeftButtonDown"></Image>
+            <Label Name="mainLabel" Foreground="Red" MouseLeftButtonDown="MainLabel_MouseLeftButtonDown"></Label>
+        </StackPanel>
+    </Viewbox>
+</Window>

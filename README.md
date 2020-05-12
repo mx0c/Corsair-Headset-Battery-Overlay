@@ -4,6 +4,7 @@ A transparent WPF overlay that displays the battery charge level of the Corsair 
 ## Usage
 * `STRG + B` to toggle visibility of the overlay
 * `ALT + X` to Exit application
+* `ALT + Q` to switch between text- and imagemode
 * Doubleclick overlay to resize
 * Click and move overlay to reposition
 

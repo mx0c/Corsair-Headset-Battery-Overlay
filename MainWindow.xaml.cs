@@ -14,6 +14,7 @@ namespace voidProApp
         private Boolean resizable { get; set; }
         private KeyboardHook exitKeyHook { get; set; }
         private KeyboardHook displayKeyHook { get; set; }
+        private KeyboardHook switchModeKeyHook { get; set; }
         private BatteryReader batteryReader { get; set; }    
 
         public MainWindow()
@@ -28,6 +29,9 @@ namespace voidProApp
 
             exitKeyHook = new KeyboardHook(this, VirtualKeyCodes.X, ModifierKeyCodes.Alt, 1);
             exitKeyHook.Triggered += exitHotkeyEvent;
+            
+            switchModeKeyHook = new KeyboardHook(this, VirtualKeyCodes.Q, ModifierKeyCodes.Alt, 2);
+            switchModeKeyHook.Triggered += switchModeKeyEvent;
         }
 
         private void exitHotkeyEvent() {
@@ -37,6 +41,10 @@ namespace voidProApp
         private void displayHotkeyEvent() {
             this.visible = !visible;
             VoidProBatteryOverlay.Visibility = this.visible ? Visibility.Visible : Visibility.Hidden; 
+        }
+
+        private void switchModeKeyEvent() {
+            this.batteryReader.displayMode = !this.batteryReader.displayMode;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -49,22 +57,10 @@ namespace voidProApp
 
         private void MainLabel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (e.ClickCount == 2) {
+                resize();
+            }
             this.DragMove();
-        }
-
-        private void MainLabel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            this.resizable = !this.resizable;
-            if (this.resizable)
-            {
-                VoidProBatteryOverlay.ResizeMode = ResizeMode.CanResizeWithGrip;
-                VoidProBatteryOverlay.BorderBrush = Brushes.White;
-                VoidProBatteryOverlay.BorderThickness = new Thickness(2);
-            }
-            else {
-                VoidProBatteryOverlay.ResizeMode = ResizeMode.NoResize;
-                VoidProBatteryOverlay.BorderThickness = new Thickness(0);
-            }
         }
 
         private void RegisterInStartup(bool isChecked)
@@ -87,6 +83,29 @@ namespace voidProApp
             Properties.Settings.Default.Left = this.Left;
             Properties.Settings.Default.Top = this.Top;
             Properties.Settings.Default.Save();
+        }
+
+        private void MainImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2) {
+                resize();
+            }
+            this.DragMove();
+        }
+
+        private void resize() {
+            this.resizable = !this.resizable;
+            if (this.resizable)
+            {
+                VoidProBatteryOverlay.ResizeMode = ResizeMode.CanResizeWithGrip;
+                VoidProBatteryOverlay.BorderBrush = Brushes.White;
+                VoidProBatteryOverlay.BorderThickness = new Thickness(2);
+            }
+            else
+            {
+                VoidProBatteryOverlay.ResizeMode = ResizeMode.NoResize;
+                VoidProBatteryOverlay.BorderThickness = new Thickness(0);
+            }
         }
     }
 }
