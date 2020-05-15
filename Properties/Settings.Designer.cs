@@ -46,5 +46,41 @@ namespace voidProApp.Properties {
                 this["Left"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("true")]
+        public string Mode {
+            get {
+                return ((string)(this["Mode"]));
+            }
+            set {
+                this["Mode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double Width {
+            get {
+                return ((double)(this["Width"]));
+            }
+            set {
+                this["Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double Height {
+            get {
+                return ((double)(this["Height"]));
+            }
+            set {
+                this["Height"] = value;
+            }
+        }
     }
 }

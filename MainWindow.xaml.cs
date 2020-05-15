@@ -51,6 +51,9 @@ namespace voidProApp
         {
             this.Left = Properties.Settings.Default.Left;
             this.Top = Properties.Settings.Default.Top;
+            VoidProBatteryOverlay.Width = Properties.Settings.Default.Width;
+            VoidProBatteryOverlay.Height = Properties.Settings.Default.Height;
+            batteryReader.displayMode = Boolean.Parse(Properties.Settings.Default.Mode);
             this.visible = true;
             this.resizable = false;
         }
@@ -70,6 +73,7 @@ namespace voidProApp
             if (isChecked)
             {
                 registryKey.SetValue("VoidProBatteryOverlay", System.Reflection.Assembly.GetExecutingAssembly().Location);
+                var x = System.Reflection.Assembly.GetExecutingAssembly().Location;
             }
             else
             {
@@ -82,6 +86,9 @@ namespace voidProApp
             //save window location
             Properties.Settings.Default.Left = this.Left;
             Properties.Settings.Default.Top = this.Top;
+            Properties.Settings.Default.Mode = batteryReader.displayMode.ToString();
+            Properties.Settings.Default.Width = VoidProBatteryOverlay.ActualWidth;
+            Properties.Settings.Default.Height = VoidProBatteryOverlay.ActualHeight;
             Properties.Settings.Default.Save();
         }
 

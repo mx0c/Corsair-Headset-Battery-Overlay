@@ -85,26 +85,35 @@ namespace voidProApp
             }
             else {
                 Uri imageSrc = null;
-                int value = Int16.Parse(text);
-                if (value < 5)
+                int value = 0;
+                try
                 {
-                    imageSrc = new Uri(imagePath + "empty.png");
+                    value = Int16.Parse(text);
+                    if (value < 5)
+                    {
+                        imageSrc = new Uri(imagePath + "empty.png");
+                    }
+                    else if (value > 5 && value < 15)
+                    {
+                        imageSrc = new Uri(imagePath + "low.png");
+                    }
+                    else if (value > 15 && value < 50)
+                    {
+                        imageSrc = new Uri(imagePath + "middle-50.png");
+                    }
+                    else if (value > 50 && value < 75)
+                    {
+                        imageSrc = new Uri(imagePath + "middle-75.png");
+                    }
+                    else if (value > 75)
+                    {
+                        imageSrc = new Uri(imagePath + "full.png");
+                    }
                 }
-                else if (value > 5 && value < 15) {
-                    imageSrc = new Uri(imagePath + "low.png");
+                catch {
+                    imageSrc = new Uri(imagePath + "charging.png");
                 }
-                else if (value > 15 && value < 50)
-                {
-                    imageSrc = new Uri(imagePath + "middle-50.png");
-                }
-                else if (value > 50 && value < 75)
-                {
-                    imageSrc = new Uri(imagePath + "middle-75.png");
-                }
-                else if (value > 75)
-                {
-                    imageSrc = new Uri(imagePath + "full.png");
-                }
+               
 
                 BitmapImage image = new BitmapImage();
                 image.BeginInit();
