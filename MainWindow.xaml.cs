@@ -54,7 +54,7 @@ namespace voidProApp
             VoidProBatteryOverlay.Width = Properties.Settings.Default.Width;
             VoidProBatteryOverlay.Height = Properties.Settings.Default.Height;
             batteryReader.displayMode = Boolean.Parse(Properties.Settings.Default.Mode);
-            this.visible = true;
+            this.visible = Properties.Settings.Default.DisplayMode;
             this.resizable = false;
         }
 
@@ -89,6 +89,7 @@ namespace voidProApp
             Properties.Settings.Default.Mode = batteryReader.displayMode.ToString();
             Properties.Settings.Default.Width = VoidProBatteryOverlay.ActualWidth;
             Properties.Settings.Default.Height = VoidProBatteryOverlay.ActualHeight;
+            Properties.Settings.Default.DisplayMode = this.batteryReader.displayMode;
             Properties.Settings.Default.Save();
         }
 

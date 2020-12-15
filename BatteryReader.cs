@@ -15,7 +15,6 @@ namespace voidProApp
         private const int VID = 0x1b1c;
         private const int PID = 0x0a14;
         static private byte[] data_req = { 0xC9, 0x64 };
-        static private string imagePath = System.IO.Directory.GetCurrentDirectory() + "\\images\\";
         public Boolean displayMode = true;
 
         private int?[] lastValues { get; set; }
@@ -91,27 +90,27 @@ namespace voidProApp
                     value = Int16.Parse(text);
                     if (value < 5)
                     {
-                        imageSrc = new Uri(imagePath + "empty.png");
+                        imageSrc = new Uri("pack://application:,,,/images/empty.png");
                     }
                     else if (value > 5 && value < 15)
                     {
-                        imageSrc = new Uri(imagePath + "low.png");
+                        imageSrc = new Uri("pack://application:,,,/images/low.png");
                     }
                     else if (value > 15 && value < 50)
                     {
-                        imageSrc = new Uri(imagePath + "middle-50.png");
+                        imageSrc = new Uri("pack://application:,,,/images/middle-50.png");
                     }
                     else if (value > 50 && value < 75)
                     {
-                        imageSrc = new Uri(imagePath + "middle-75.png");
+                        imageSrc = new Uri("pack://application:,,,/images/middle-75.png");
                     }
                     else if (value > 75)
                     {
-                        imageSrc = new Uri(imagePath + "full.png");
+                        imageSrc = new Uri("pack://application:,,,/images/full.png");
                     }
                 }
                 catch {
-                    imageSrc = new Uri(imagePath + "charging.png");
+                    imageSrc = new Uri("pack://application:,,,/images/charging.png");
                 }
                
 

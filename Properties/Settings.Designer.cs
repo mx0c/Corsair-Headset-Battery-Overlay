@@ -82,5 +82,17 @@ namespace voidProApp.Properties {
                 this["Height"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayMode {
+            get {
+                return ((bool)(this["DisplayMode"]));
+            }
+            set {
+                this["DisplayMode"] = value;
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@
     <Viewbox>
         <StackPanel Orientation="Vertical">
             <Image Name="mainImage" Stretch="Fill" MouseLeftButtonDown="MainImage_MouseLeftButtonDown"></Image>
-            <Label Name="mainLabel" Foreground="Red" MouseLeftButtonDown="MainLabel_MouseLeftButtonDown"></Label>
+            <Label Name="mainLabel" Foreground="Red" MouseLeftButtonDown="MainLabel_MouseLeftButtonDown">Error</Label>
         </StackPanel>
     </Viewbox>
 </Window>
