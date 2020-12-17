@@ -6,8 +6,9 @@ using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using log4net;
 
-namespace voidProApp
+namespace VoidProOverlay
 {
     class BatteryReader
     {
@@ -15,7 +16,8 @@ namespace voidProApp
         private const int VID = 0x1b1c;
         private const int PID = 0x0a14;
         static private byte[] data_req = { 0xC9, 0x64 };
-        public Boolean displayMode = true;
+        public Boolean displayMode;
+        public Boolean shutdown = false;
 
         private int?[] lastValues { get; set; }
         private const int filterLength = 25;
@@ -27,14 +29,17 @@ namespace voidProApp
         static private HidReport rep = new HidReport(2, new HidDeviceData(data_req, HidDeviceData.ReadStatus.Success));
         private HidDevice device;
 
-        public BatteryReader(MainWindow ctx) {
-            this.mainLabel = ctx.mainLabel;
-            this.mainImage = ctx.mainImage;
-            this.dispatcher = ctx.Dispatcher;
+        public BatteryReader()
+        {
+            this.mainLabel = MainWindow.label;
+            this.mainImage = MainWindow.image;
+            this.dispatcher = App.Current.Dispatcher;
             this.lastValues = new int?[filterLength];
+            this.displayMode = AppSettings.Default.DisplayMode;           
         }
-   
-        private int filterValue(int value) {
+
+        private int filterValue(int value)
+        {
             int sum = 0, i;
 
             if (!lastValues.Contains(null))
@@ -58,10 +63,11 @@ namespace voidProApp
                     sum += (int)lastValues[i];
                 }
             }
-            return sum / (i+1);
+            return sum / (i + 1);
         }
 
-        public void setLabelContent(string text) {
+        public void setLabelContent(string text)
+        {    
             dispatcher.Invoke(() =>
             {
                 mainLabel.Visibility = displayMode ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
@@ -82,7 +88,8 @@ namespace voidProApp
                     mainLabel.Content = txt;
                 });
             }
-            else {
+            else
+            {
                 Uri imageSrc = null;
                 int value = 0;
                 try
@@ -109,40 +116,43 @@ namespace voidProApp
                         imageSrc = new Uri("pack://application:,,,/images/full.png");
                     }
                 }
-                catch {
+                catch
+                {
                     imageSrc = new Uri("pack://application:,,,/images/charging.png");
                 }
-               
+
 
                 BitmapImage image = new BitmapImage();
                 image.BeginInit();
                 image.UriSource = imageSrc;
                 image.EndInit();
                 image.Freeze();
-                
+
                 dispatcher.Invoke(() =>
                 {
                     mainImage.Source = image;
                 });
-            }           
+            }
         }
 
         public void getBatteryStatusViaHID()
         {
-            var devs = new List<HidDevice>(HidDevices.Enumerate(VID, PID));       
+            var devs = new List<HidDevice>(HidDevices.Enumerate(VID, PID));
             foreach (var dev in devs)
             {
-                if (dev.DevicePath.Contains("col02")) {
+                if (dev.DevicePath.Contains("col02"))
+                {
                     device = dev;
                     break;
                 }
             }
 
             if (device != null)
-            {               
+            {
                 device.OpenDevice();
                 device.WriteReport(rep);
-                device.ReadReport(handleReport);    
+                HidDeviceData data = device.Read();
+                handleReport(data);
             }
             else
             {
@@ -151,35 +161,38 @@ namespace voidProApp
             }
         }
 
-        private void handleReport(HidReport report)
+        private void handleReport(HidDeviceData data)
         {
             try
             {
+                //If MicUp
+                if (data.Data[2] > VOID_BATTERY_MICUP)
+                {
+                    setLabelContent((data.Data[2] - VOID_BATTERY_MICUP).ToString());
+                    return;
+                }
+
                 //If Charging
-                if (report.Data[3] == 0 || report.Data[3] == 4 || report.Data[3] == 5)
+                if (data.Data[4] == 0 || data.Data[4] == 4 || data.Data[4] == 5)
                 {
                     setLabelContent("Battery Charging");
                     this.lastValues = new int?[filterLength];
                     return;
                 }
 
-                //If MicUp
-                if (report.Data[1] > VOID_BATTERY_MICUP)
-                {
-                    setLabelContent((report.Data[1] - VOID_BATTERY_MICUP).ToString());
-                    return;
-                }
-
-                setLabelContent(report.Data[1].ToString());
+                setLabelContent(data.Data[2].ToString());
                 return;
             }
             catch { return; }
             finally
             {
-                device.WriteReport(rep);
-                Thread.Sleep(250);
-                device.ReadReport(handleReport);
+                if (!shutdown) { 
+                    device.WriteReport(rep);
+                    Thread.Sleep(250);
+                    HidDeviceData d = device.Read();
+                    handleReport(d);
+                }
             }
-        }  
+        }
     }
 }

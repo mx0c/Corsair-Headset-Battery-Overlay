@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace voidProApp
+namespace VoidProOverlay
 {
 
     [Flags]
@@ -87,7 +87,7 @@ namespace voidProApp
             if ((msg.message == 786) && (msg.wParam.ToInt32() == Identifier) && (Triggered != null))
                 Triggered();
         }
-  
+
         public void Dispose()
         {
             if (!IsDisposed)

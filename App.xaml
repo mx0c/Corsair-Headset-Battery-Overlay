@@ -1,7 +1,7 @@
-﻿<Application x:Class="voidProApp.App"
+﻿<Application x:Class="VoidProOverlay.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:voidProApp"
+             xmlns:local="clr-namespace:VoidProOverlay"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

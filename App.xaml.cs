@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
+﻿using log4net;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
-namespace voidProApp
+namespace VoidProOverlay
 {
     /// <summary>
-    /// Interaktionslogik für "App.xaml"
+    /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
+
     }
 }
