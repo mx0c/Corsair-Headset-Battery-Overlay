@@ -135,18 +135,30 @@ namespace VoidProOverlay
             }
         }
 
-        public void getBatteryStatusViaHID()
-        {
+        private HidDevice getHidDevice() {
             var devs = new List<HidDevice>(HidDevices.Enumerate(VID, PID));
+            if (devs.Count == 1) {
+                return devs[0];
+            }
+
             foreach (var dev in devs)
             {
                 if (dev.DevicePath.Contains("col02"))
                 {
-                    device = dev;
-                    break;
+                    return dev;
                 }
             }
 
+            if (devs.Count > 0) {
+                return devs[0];
+            }
+
+            return null;
+        }
+
+        public void getBatteryStatusViaHID()
+        {
+            device = getHidDevice();
             if (device != null)
             {
                 device.OpenDevice();
