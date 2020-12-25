@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Win32;
@@ -18,8 +20,8 @@ namespace VoidProOverlay
         private BatteryReader batteryReader { get; set; }
 
         private Thread readThread;
-
-        public static Label label;
+        private NotifyIcon ni;
+        public static System.Windows.Controls.Label label;
         public static Image image;
 
         public MainWindow()
@@ -40,12 +42,29 @@ namespace VoidProOverlay
 
             switchModeKeyHook = new KeyboardHook(this, VirtualKeyCodes.Q, ModifierKeyCodes.Alt, 2);
             switchModeKeyHook.Triggered += switchModeKeyEvent;
+
+            setupTrayIcon();
+        }
+
+        private void setupTrayIcon() {
+            ni = new NotifyIcon();
+            Stream iconStream = System.Windows.Application.GetResourceStream(new Uri("pack://application:,,,/icon/headset.ico")).Stream;
+            ni.Icon = new System.Drawing.Icon(iconStream);
+            iconStream.Dispose();
+            ni.Visible = true;
+            ni.ContextMenuStrip = new ContextMenuStrip();
+            ni.ContextMenuStrip.Items.Add("Exit", null, (sender, args) => { exitHotkeyEvent(); });
+            ni.ContextMenuStrip.Items.Add("Remove from Autostart", null, (sender, args) => { RegisterInStartup(false); });
+            ni.ContextMenuStrip.Items.Add("Visibility", null, (sender, args) => { displayHotkeyEvent(); });
+            ((ToolStripMenuItem)ni.ContextMenuStrip.Items[2]).CheckOnClick = true;
+            ((ToolStripMenuItem)ni.ContextMenuStrip.Items[2]).Checked = true;
+            ni.ContextMenuStrip.Items.Add(this.batteryReader.displayMode ? "Activate Imagemode" : "Activate Textmode", null, (sender, args) => { switchModeKeyEvent(); });
         }
 
         private void exitHotkeyEvent()
         {
             batteryReader.shutdown = true;
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
 
         private void displayHotkeyEvent()
@@ -56,7 +75,7 @@ namespace VoidProOverlay
 
         private void switchModeKeyEvent()
         {
-            //log.Info("changed displaymode");
+            this.ni.ContextMenuStrip.Items[3].Text = this.batteryReader.displayMode ? "Activate Textmode" : "Activate Imagemode";
             this.batteryReader.displayMode = !this.batteryReader.displayMode;
         }
 
@@ -87,8 +106,7 @@ namespace VoidProOverlay
                     ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (isChecked)
             {
-                registryKey.SetValue("VoidProBatteryOverlay", System.Reflection.Assembly.GetExecutingAssembly().Location);
-                var x = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                registryKey.SetValue("VoidProBatteryOverlay", System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
                 //log.Info("Registered in Startup");
             }
             else

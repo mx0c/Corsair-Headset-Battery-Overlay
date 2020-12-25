@@ -5,9 +5,11 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <AppDesignerFolder>Properties</AppDesignerFolder>
+	<UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="icon\headset.ico" />
     <None Remove="images\charging.png" />
     <None Remove="images\empty.png" />
     <None Remove="images\full.png" />
@@ -23,6 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="icon\headset.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="images\charging.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
