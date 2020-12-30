@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VoidProOverlay": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

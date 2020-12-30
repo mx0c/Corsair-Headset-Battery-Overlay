@@ -6,6 +6,7 @@
     <UseWPF>true</UseWPF>
     <AppDesignerFolder>Properties</AppDesignerFolder>
 	<UseWindowsForms>true</UseWindowsForms>
+	<ApplicationIcon></ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,8 +21,6 @@
 
   <ItemGroup>
     <PackageReference Include="HidApiAdapter" Version="1.0.5" />
-    <PackageReference Include="hidlibrary" Version="3.3.40" />
-    <PackageReference Include="log4net" Version="2.0.12" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,10 +56,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="C:\Users\mariu\.nuget\packages\hidapiadapter\1.0.5\contentFiles\any\netstandard2.0\hidapi32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\mariu\.nuget\packages\hidapiadapter\1.0.5\contentFiles\any\netstandard2.0\hidapi64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="AppSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>AppSettings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="lib\" />
   </ItemGroup>
 
 </Project>

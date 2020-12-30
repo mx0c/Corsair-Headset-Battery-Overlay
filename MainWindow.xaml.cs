@@ -19,8 +19,7 @@ namespace VoidProOverlay
         private KeyboardHook switchModeKeyHook { get; set; }
         private BatteryReader batteryReader { get; set; }
 
-        private Thread readThread;
-        private NotifyIcon ni;
+        public static NotifyIcon ni;
         public static System.Windows.Controls.Label label;
         public static Image image;
 
@@ -59,11 +58,34 @@ namespace VoidProOverlay
             ((ToolStripMenuItem)ni.ContextMenuStrip.Items[2]).CheckOnClick = true;
             ((ToolStripMenuItem)ni.ContextMenuStrip.Items[2]).Checked = true;
             ni.ContextMenuStrip.Items.Add(this.batteryReader.displayMode ? "Activate Imagemode" : "Activate Textmode", null, (sender, args) => { switchModeKeyEvent(); });
+
+            ni.ContextMenuStrip.Items.Add("Manually select Device", null, null);
+            var devices = HidApiAdapter.HidDeviceManager.GetManager().SearchDevices(BatteryReader.VID, BatteryReader.PID);
+            foreach (var dev in devices) {
+                ((ToolStripMenuItem)ni.ContextMenuStrip.Items[4]).DropDownItems.Add(dev.Path(), null, (sender, args) =>
+                {
+                    BatteryReader.manuallySelectedDevice = ((ToolStripMenuItem)sender).Text;
+                    foreach (ToolStripMenuItem item in ((ToolStripMenuItem)sender).GetCurrentParent().Items) {
+                        item.Checked = false;
+                    }
+                    ((ToolStripMenuItem)sender).Checked = true;
+                });
+
+            }
+        }
+
+        static public void selectDevice(string devicePath) {
+            foreach (var item in ((ToolStripMenuItem)ni.ContextMenuStrip.Items[4]).DropDownItems)
+            {
+                if (item.ToString().Equals(devicePath))
+                {
+                    App.Current.Dispatcher.Invoke(() => { ((ToolStripMenuItem)item).Checked = true; });
+                }
+            }
         }
 
         private void exitHotkeyEvent()
         {
-            batteryReader.shutdown = true;
             System.Windows.Application.Current.Shutdown();
         }
 
@@ -75,7 +97,7 @@ namespace VoidProOverlay
 
         private void switchModeKeyEvent()
         {
-            this.ni.ContextMenuStrip.Items[3].Text = this.batteryReader.displayMode ? "Activate Textmode" : "Activate Imagemode";
+            ni.ContextMenuStrip.Items[3].Text = this.batteryReader.displayMode ? "Activate Textmode" : "Activate Imagemode";
             this.batteryReader.displayMode = !this.batteryReader.displayMode;
         }
 
@@ -87,8 +109,7 @@ namespace VoidProOverlay
             VoidProBatteryOverlay.Height = AppSettings.Default.Height;
             this.visible = true;
             this.resizable = false;
-            readThread = new Thread(batteryReader.getBatteryStatusViaHID);
-            readThread.Start();          
+            batteryReader.scanLoop();
         }
 
         private void MainLabel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
