@@ -82,5 +82,17 @@ namespace VoidProOverlay {
                 this["DisplayMode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0a14")]
+        public string PID {
+            get {
+                return ((string)(this["PID"]));
+            }
+            set {
+                this["PID"] = value;
+            }
+        }
     }
 }

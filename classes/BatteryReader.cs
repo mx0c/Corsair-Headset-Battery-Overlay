@@ -32,6 +32,7 @@ namespace VoidProOverlay
 
         public BatteryReader()
         {
+            PID = int.Parse(AppSettings.Default.PID, System.Globalization.NumberStyles.HexNumber);
             this.mainLabel = MainWindow.label;
             this.mainImage = MainWindow.image;
             this.dispatcher = App.Current.Dispatcher;

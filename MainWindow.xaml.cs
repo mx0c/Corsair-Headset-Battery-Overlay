@@ -53,7 +53,10 @@ namespace VoidProOverlay
             ni.Visible = true;
             ni.ContextMenuStrip = new ContextMenuStrip();
             ni.ContextMenuStrip.Items.Add("Exit", null, (sender, args) => { exitHotkeyEvent(); });
-            ni.ContextMenuStrip.Items.Add("Remove from Autostart", null, (sender, args) => { RegisterInStartup(false); });
+            ni.ContextMenuStrip.Items.Add("Remove from Autostart", null, (sender, args) => { 
+                RegisterInStartup(false);
+                System.Windows.MessageBox.Show("Successfully removed from Autostart", "VoidProOverlay" , MessageBoxButton.OK);
+            });
             ni.ContextMenuStrip.Items.Add("Visibility", null, (sender, args) => { displayHotkeyEvent(); });
             ((ToolStripMenuItem)ni.ContextMenuStrip.Items[2]).CheckOnClick = true;
             ((ToolStripMenuItem)ni.ContextMenuStrip.Items[2]).Checked = true;
@@ -70,8 +73,30 @@ namespace VoidProOverlay
                     }
                     ((ToolStripMenuItem)sender).Checked = true;
                 });
-
             }
+            ni.ContextMenuStrip.Items.Add("Change PID", null, null);
+            var ttb = new ToolStripTextBox();
+            ttb.Text = BatteryReader.PID.ToString("X4");
+            ttb.TextChanged += (sender, args) => {
+                ni.ContextMenuStrip.Items.RemoveAt(4);
+                ni.ContextMenuStrip.Items.Insert(4, new ToolStripMenuItem("Manually select Device"));
+                var hexStr = ((ToolStripTextBox)sender).Text;
+                BatteryReader.PID = int.Parse(hexStr, System.Globalization.NumberStyles.HexNumber);
+                var devices = HidApiAdapter.HidDeviceManager.GetManager().SearchDevices(BatteryReader.VID, BatteryReader.PID);
+                foreach (var dev in devices)
+                {
+                    ((ToolStripMenuItem)ni.ContextMenuStrip.Items[4]).DropDownItems.Add(dev.Path(), null, (sender, args) =>
+                    {
+                        BatteryReader.manuallySelectedDevice = ((ToolStripMenuItem)sender).Text;
+                        foreach (ToolStripMenuItem item in ((ToolStripMenuItem)sender).GetCurrentParent().Items)
+                        {
+                            item.Checked = false;
+                        }
+                        ((ToolStripMenuItem)sender).Checked = true;
+                    });
+                }
+            };
+            ((ToolStripMenuItem)ni.ContextMenuStrip.Items[5]).DropDownItems.Add(ttb);
         }
 
         static public void selectDevice(string devicePath) {
@@ -106,7 +131,7 @@ namespace VoidProOverlay
             this.Left = AppSettings.Default.Left;
             this.Top = AppSettings.Default.Top;
             VoidProBatteryOverlay.Width = AppSettings.Default.Width;
-            VoidProBatteryOverlay.Height = AppSettings.Default.Height;
+            VoidProBatteryOverlay.Height = AppSettings.Default.Height;         
             this.visible = true;
             this.resizable = false;
             batteryReader.scanLoop();
@@ -144,6 +169,7 @@ namespace VoidProOverlay
             AppSettings.Default.Width = VoidProBatteryOverlay.ActualWidth;
             AppSettings.Default.Height = VoidProBatteryOverlay.ActualHeight;
             AppSettings.Default.DisplayMode = this.batteryReader.displayMode;
+            AppSettings.Default.PID = BatteryReader.PID.ToString("X4");
             AppSettings.Default.Save();
         }
 

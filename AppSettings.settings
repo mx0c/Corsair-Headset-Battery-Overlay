@@ -17,5 +17,8 @@
     <Setting Name="DisplayMode" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="PID" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0a14</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
