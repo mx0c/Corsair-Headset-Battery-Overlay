@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\mariu\.nuget\packages\hidapiadapter\1.0.5\contentFiles\any\netstandard2.0\hidapi32.dll" />
+    <Content Remove="C:\Users\mariu\.nuget\packages\hidapiadapter\1.0.5\contentFiles\any\netstandard2.0\hidapi64.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="icon\headset.ico" />
     <None Remove="images\charging.png" />
     <None Remove="images\empty.png" />
@@ -17,10 +22,12 @@
     <None Remove="images\low.png" />
     <None Remove="images\middle-50.png" />
     <None Remove="images\middle-75.png" />
+    <None Remove="predefined_configurations.json" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="HidApiAdapter" Version="1.0.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +52,9 @@
     <Resource Include="images\middle-75.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <EmbeddedResource Include="predefined_configurations.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -56,23 +66,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="C:\Users\mariu\.nuget\packages\hidapiadapter\1.0.5\contentFiles\any\netstandard2.0\hidapi32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\mariu\.nuget\packages\hidapiadapter\1.0.5\contentFiles\any\netstandard2.0\hidapi64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="AppSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>AppSettings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="lib\" />
+    <None Update="hidapi32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="hidapi64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

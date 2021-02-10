@@ -94,5 +94,17 @@ namespace VoidProOverlay {
                 this["PID"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PredefinedDevice {
+            get {
+                return ((string)(this["PredefinedDevice"]));
+            }
+            set {
+                this["PredefinedDevice"] = value;
+            }
+        }
     }
 }

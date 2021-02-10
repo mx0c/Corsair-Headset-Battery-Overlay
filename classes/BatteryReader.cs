@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows.Controls;
@@ -8,7 +7,6 @@ using System.Windows.Threading;
 using System.Threading.Tasks;
 using HidApiAdapter;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace VoidProOverlay
 {
@@ -151,14 +149,12 @@ namespace VoidProOverlay
                 {
                     if (dev.Path().Contains("col02"))
                     {
-                        MainWindow.selectDevice(dev.Path());
                         return dev;
                     }
                 }
 
                 if (devices.Count > 0)
                 {
-                    MainWindow.selectDevice(devices.FirstOrDefault().Path());
                     return devices.FirstOrDefault();
                 }
 

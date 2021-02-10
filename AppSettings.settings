@@ -20,5 +20,8 @@
     <Setting Name="PID" Type="System.String" Scope="User">
       <Value Profile="(Default)">0a14</Value>
     </Setting>
+    <Setting Name="PredefinedDevice" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
