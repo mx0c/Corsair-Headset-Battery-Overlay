@@ -13,8 +13,10 @@ Also:
 
 ## Supported Headsets
 * CORSAIR Void RGB wireless
+* CORSAIR VOID RGB Elite wireless
 * CORSAIR HS70 Wireless Gaming Headset
-* Corsair VOID PRO Wireless Gaming Headset
+* CORSAIR VOID PRO Wireless Gaming Headset
+
 
 Let me know if you have another Headset that works with this overlay. 
 
