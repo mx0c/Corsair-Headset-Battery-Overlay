@@ -14,5 +14,9 @@
 	{
 		"name":"Corsair VOID PRO Wireless Gaming Headset II",
 		"PID":"0A16"
+	},
+	{
+		"name":"Corsair VOID RGB Elite Wireless Gaming Headset",
+		"PID":"0A51"
 	}
 ]
