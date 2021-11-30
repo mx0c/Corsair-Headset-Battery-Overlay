@@ -15,10 +15,10 @@ namespace VoidProOverlay
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = "VoidProOverlay.predefined_configurations.json";
 
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            using (var reader = new StreamReader(stream))
             {
-                string jsonFile = reader.ReadToEnd();
+                var jsonFile = reader.ReadToEnd();
                 this.deviceconfigs = JsonConvert.DeserializeObject<List<Device>>(jsonFile);
             }
         }
