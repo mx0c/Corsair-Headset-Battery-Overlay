@@ -1,35 +1,32 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-	<UseWindowsForms>true</UseWindowsForms>
-	<ApplicationIcon></ApplicationIcon>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon/>
   </PropertyGroup>
-
   <ItemGroup>
-    <Content Remove="C:\Users\mariu\.nuget\packages\hidapiadapter\1.0.5\contentFiles\any\netstandard2.0\hidapi32.dll" />
-    <Content Remove="C:\Users\mariu\.nuget\packages\hidapiadapter\1.0.5\contentFiles\any\netstandard2.0\hidapi64.dll" />
+    <Content Remove="C:\Users\mariu\.nuget\packages\hidapiadapter\1.0.5\contentFiles\any\netstandard2.0\hidapi32.dll"/>
+    <Content Remove="C:\Users\mariu\.nuget\packages\hidapiadapter\1.0.5\contentFiles\any\netstandard2.0\hidapi64.dll"/>
   </ItemGroup>
-
   <ItemGroup>
-    <None Remove="icon\headset.ico" />
-    <None Remove="images\charging.png" />
-    <None Remove="images\empty.png" />
-    <None Remove="images\full.png" />
-    <None Remove="images\low.png" />
-    <None Remove="images\middle-50.png" />
-    <None Remove="images\middle-75.png" />
-    <None Remove="predefined_configurations.json" />
+    <None Remove="icon\headset.ico"/>
+    <None Remove="images\charging.png"/>
+    <None Remove="images\empty.png"/>
+    <None Remove="images\full.png"/>
+    <None Remove="images\low.png"/>
+    <None Remove="images\middle-50.png"/>
+    <None Remove="images\middle-75.png"/>
+    <None Remove="predefined_configurations.json"/>
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="HidApiAdapter" Version="1.0.5" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="HidApiAdapter" Version="1.0.5"/>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3"/>
+    <PackageReference Include="Caliburn.Micro" Version="4.0.173"/>
+    <PackageReference Include="SharpDX.XInput" Version="4.2.0"/>
   </ItemGroup>
-
   <ItemGroup>
     <Resource Include="icon\headset.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -56,7 +53,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="AppSettings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -64,7 +60,6 @@
       <DependentUpon>AppSettings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="AppSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -77,5 +72,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>

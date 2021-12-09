@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Win32;
 
+
 namespace VoidProOverlay
 {
     public partial class MainWindow : Window
@@ -22,12 +23,14 @@ namespace VoidProOverlay
         private NotifyIcon ni = new NotifyIcon();
         public static System.Windows.Controls.Label label;
         public static Image image;
+        public static System.Windows.Controls.Label controllerLabel;
 
         public MainWindow()
         {
             InitializeComponent();
             RegisterInStartup(true);
 
+            controllerLabel = ctrlLabel;
             label = mainLabel;
             image = mainImage;
 

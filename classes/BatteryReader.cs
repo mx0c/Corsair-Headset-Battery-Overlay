@@ -7,6 +7,7 @@ using System.Windows.Threading;
 using System.Threading.Tasks;
 using HidApiAdapter;
 using System.Reflection;
+using SharpDX.XInput; 
 
 namespace VoidProOverlay
 {
@@ -18,11 +19,12 @@ namespace VoidProOverlay
         static private byte[] data_req = { 0xC9, 0x64 };
         public Boolean displayMode;
         static public String manuallySelectedDevice = null;
-
+        private Controller controller { get; set; }
         private int?[] lastValues { get; set; }
         private const int filterLength = 25;
 
         private System.Windows.Controls.Label mainLabel;
+        private System.Windows.Controls.Label mainControllerLabel;
         private Image mainImage;
         private Dispatcher dispatcher;
         private HidDevice device;
@@ -33,6 +35,7 @@ namespace VoidProOverlay
             PID = int.Parse(AppSettings.Default.PID, System.Globalization.NumberStyles.HexNumber);
             this.mainLabel = MainWindow.label;
             this.mainImage = MainWindow.image;
+            this.mainControllerLabel = MainWindow.controllerLabel;
             this.dispatcher = App.Current.Dispatcher;
             this.lastValues = new int?[filterLength];
             this.displayMode = AppSettings.Default.DisplayMode;
@@ -79,6 +82,24 @@ namespace VoidProOverlay
             }
         } 
 
+        private string getLabelControllerContent(BatteryInformation bi){
+            switch (bi.BatteryLevel)
+            {
+                case BatteryLevel.Empty:
+                    return "Empty";
+                case BatteryLevel.Full:
+                    return "Full";
+                case BatteryLevel.Low:
+                    return "Low";
+                case BatteryLevel.Medium:
+                    return "Medium";
+            }
+            if(bi.BatteryType == BatteryType.Wired){
+                return "Controller: Loading";
+            }
+            return "Controller: Error";
+        }
+
         public void setLabelContent(string text)
         {
             this.dispatcher.Invoke(() =>
@@ -95,6 +116,18 @@ namespace VoidProOverlay
                     }
                     catch { txt = text; }
                     mainLabel.Content = txt;
+
+                    // set controller label
+                    var CtrlState = getControllerBatteryStatus();
+                    if (CtrlState.BatteryType == BatteryType.Disconnected || 
+                        CtrlState.BatteryType == BatteryType.Unknown)
+                    {
+                        mainControllerLabel.Visibility = System.Windows.Visibility.Collapsed;
+                    }else{
+                        mainControllerLabel.Visibility = System.Windows.Visibility.Visible;
+                        var ctrlContent = getLabelControllerContent(CtrlState);
+                        mainControllerLabel.Content = ctrlContent;
+                    }
                 }
                 else
                 {
@@ -169,6 +202,19 @@ namespace VoidProOverlay
                 return null;
             }
         }
+
+        public BatteryInformation getControllerBatteryStatus(){
+             var controllers = new[]
+            {
+                new Controller(UserIndex.One), new Controller(UserIndex.Two), new Controller(UserIndex.Three),
+                new Controller(UserIndex.Four)
+            };
+            controller = controllers.FirstOrDefault(selectController => selectController.IsConnected);
+            if (controller != null){
+                return controller.GetBatteryInformation(BatteryDeviceType.Gamepad);
+            }
+            return new BatteryInformation() {BatteryLevel = BatteryLevel.Empty, BatteryType = BatteryType.Disconnected};
+        } 
 
         public Task<byte[]> getBatteryStatusViaHID()
         {

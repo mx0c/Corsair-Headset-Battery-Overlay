@@ -16,7 +16,8 @@
     <Viewbox>
         <StackPanel Orientation="Vertical">
             <Image Name="mainImage" Stretch="Fill" MouseLeftButtonDown="MainImage_MouseLeftButtonDown"></Image>
-            <Label Name="mainLabel" Foreground="Red" MouseLeftButtonDown="MainLabel_MouseLeftButtonDown">Error</Label>
+            <Label Padding="0" HorizontalContentAlignment="Center" Name="mainLabel" Foreground="Red" MouseLeftButtonDown="MainLabel_MouseLeftButtonDown">Error</Label>
+            <Label Padding="0" HorizontalContentAlignment="Center" FontSize="7" Name="ctrlLabel" Foreground="Red" MouseLeftButtonDown="MainLabel_MouseLeftButtonDown">Error</Label>
         </StackPanel>
     </Viewbox>
 </Window>
