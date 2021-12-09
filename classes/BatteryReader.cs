@@ -10,8 +10,20 @@ using System.Reflection;
 
 namespace VoidProOverlay
 {
+    public class BatteryPercentEventArgs : EventArgs
+    {
+        public int BatteryPercent { get; }
+
+        public BatteryPercentEventArgs(int percent)
+        {
+            BatteryPercent = percent;
+        }
+    }
+
     class BatteryReader
     {
+        public EventHandler<BatteryPercentEventArgs> OnBatteryPercentUpdated { get; set; }
+
         private const int VOID_BATTERY_MICUP = 128;
         static public int VID = 0x1b1c;
         static public int PID = 0x0a14;
@@ -63,43 +75,63 @@ namespace VoidProOverlay
                     sum += (int)lastValues[i];
                 }
             }
+
             return sum / (i + 1);
         }
 
-        public async void scanLoop() {
-            while (true) { 
-                var buffer = await getBatteryStatusViaHID();
-                if (buffer != null)
+        public async void scanLoop()
+        {
+            Task.Run(async () =>
+            {
+                while (true)
                 {
-                    handleReport(buffer);
+                    var buffer = await getBatteryStatusViaHID();
+                    if (buffer != null)
+                    {
+                        handleReport(buffer);
+                        Thread.Sleep(5000);
+                    }
+                    else
+                    {
+                        setLabelContent("device not found");
+                        Thread.Sleep(1000);
+                    }
                 }
-                else {
-                    setLabelContent("device not found");
-                }
-            }
-        } 
+            });
+        }
 
         public void setLabelContent(string text)
         {
             this.dispatcher.Invoke(() =>
             {
-                mainLabel.Visibility = displayMode ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
-                mainImage.Visibility = displayMode ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+                mainLabel.Visibility = displayMode
+                    ? System.Windows.Visibility.Visible
+                    : System.Windows.Visibility.Collapsed;
+                mainImage.Visibility = displayMode
+                    ? System.Windows.Visibility.Collapsed
+                    : System.Windows.Visibility.Visible;
 
                 if (this.displayMode)
                 {
                     string txt;
                     try
                     {
-                        txt = filterValue(Int16.Parse(text)).ToString() + "%";
+                        var averagedValue = filterValue(Int16.Parse(text));
+                        txt = $"{averagedValue}%";
+                        var handler = OnBatteryPercentUpdated;
+                        handler?.Invoke(this, new BatteryPercentEventArgs(averagedValue));
                     }
-                    catch { txt = text; }
+                    catch
+                    {
+                        txt = text;
+                    }
+
                     mainLabel.Content = txt;
                 }
                 else
                 {
                     Uri imageSrc = null;
-                    int value = 0;
+                    var value = 0;
                     try
                     {
                         value = Int16.Parse(text);
@@ -129,7 +161,7 @@ namespace VoidProOverlay
                         imageSrc = new Uri("pack://application:,,,/images/charging.png");
                     }
 
-                    BitmapImage image = new BitmapImage();
+                    var image = new BitmapImage();
                     image.BeginInit();
                     image.UriSource = imageSrc;
                     image.EndInit();
@@ -140,7 +172,8 @@ namespace VoidProOverlay
             });
         }
 
-        private HidDevice getHidDevice() {
+        private HidDevice getHidDevice()
+        {
             var devices = HidDeviceManager.GetManager().SearchDevices(VID, PID);
 
             if (manuallySelectedDevice == null)
@@ -160,12 +193,16 @@ namespace VoidProOverlay
 
                 return null;
             }
-            else {
-                foreach (HidDevice dev in devices) {
-                    if (dev.Path().Equals(manuallySelectedDevice)) {
+            else
+            {
+                foreach (var dev in devices)
+                {
+                    if (dev.Path().Equals(manuallySelectedDevice))
+                    {
                         return dev;
                     }
                 }
+
                 return null;
             }
         }
@@ -181,12 +218,13 @@ namespace VoidProOverlay
                     device.Connect();
 
                     //get handle via reflection, because its a private field (oof)
-                    var field = typeof(HidDevice).GetField("m_DevicePtr", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var field = typeof(HidDevice).GetField("m_DevicePtr",
+                        BindingFlags.NonPublic | BindingFlags.Instance);
                     devPtr = (IntPtr)field.GetValue(device);
 
-                    byte[] buffer = new byte[5];
+                    var buffer = new byte[5];
                     HidApi.hid_write(devPtr, data_req, Convert.ToUInt32(data_req.Length));
-                    HidApi.hid_read_timeout(devPtr, buffer, Convert.ToUInt32(buffer.Length),1000);
+                    HidApi.hid_read_timeout(devPtr, buffer, Convert.ToUInt32(buffer.Length), 1000);
                     device.Disconnect();
                     Thread.Sleep(250);
                     return buffer;
@@ -219,7 +257,10 @@ namespace VoidProOverlay
 
                 setLabelContent(data[2].ToString());
             }
-            catch { return; }
+            catch
+            {
+                return;
+            }
         }
     }
 }

@@ -7,6 +7,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
 	<UseWindowsForms>true</UseWindowsForms>
 	<ApplicationIcon></ApplicationIcon>
+	<LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -55,6 +56,39 @@
     <EmbeddedResource Include="predefined_configurations.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <None Remove="icon\discharging-00.ico" />
+    <None Remove="icon\discharging-100.ico" />
+    <None Remove="icon\discharging-25.ico" />
+    <None Remove="icon\discharging-50.ico" />
+    <None Remove="icon\discharging-75.ico" />
+    <None Remove="icon\battery-white-00.ico" />
+    <Resource Include="icon\battery-white-00.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="icon\battery-white-10.ico" />
+    <Resource Include="icon\battery-white-10.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="icon\battery-white-100.ico" />
+    <Resource Include="icon\battery-white-100.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="icon\battery-white-25.ico" />
+    <Resource Include="icon\battery-white-25.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="icon\battery-white-50.ico" />
+    <Resource Include="icon\battery-white-50.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="icon\battery-white-75.ico" />
+    <Resource Include="icon\battery-white-75.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="icon\battery-white-90.ico" />
+    <Resource Include="icon\battery-white-90.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
