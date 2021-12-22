@@ -165,13 +165,13 @@ namespace VoidProOverlay
 
         private void AddVisibilityToggler()
         {
-            visible = false;
+            visible = true;
             var item = ni.ContextMenuStrip.Items.Add("Visibility", null, (sender, args) =>
             {
                 ToggleVisibility();
             });
             ((ToolStripMenuItem)item).CheckOnClick = true;
-            ((ToolStripMenuItem)item).Checked = visible;
+            ((ToolStripMenuItem)item).Checked = true;
         }
 
         private void AddModeToggle()
@@ -186,7 +186,7 @@ namespace VoidProOverlay
 
         private void AddManualPIDChanger()
         {
-            var parentItem = ni.ContextMenuStrip.Items.Add("Change PID", null, null);
+            var parentItem = ni.ContextMenuStrip.Items.Add("Manually change PID", null, null);
             var ttb = new ToolStripTextBox();
             ttb.Text = BatteryReader.PID.ToString("X4");
             ttb.TextChanged += (sender, args) =>
@@ -261,7 +261,7 @@ namespace VoidProOverlay
 
         private void ModeSwitchRequested()
         {
-            ni.ContextMenuStrip.Items[3].Text = batteryReader.displayMode
+            ni.ContextMenuStrip.Items[1].Text = batteryReader.displayMode
                 ? "Activate Textmode"
                 : "Activate Imagemode";
             batteryReader.displayMode = !batteryReader.displayMode;

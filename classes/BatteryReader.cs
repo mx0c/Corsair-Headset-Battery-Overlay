@@ -79,7 +79,7 @@ namespace VoidProOverlay
             return sum / (i + 1);
         }
 
-        public async void scanLoop()
+        public void scanLoop()
         {
             Task.Run(async () =>
             {
