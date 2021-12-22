@@ -15,10 +15,11 @@ Also:
 * Click and move overlay to reposition the overlay
 
 ## Supported Headsets
-* CORSAIR Void RGB wireless
-* CORSAIR VOID RGB Elite wireless
-* CORSAIR HS70 Wireless Gaming Headset
-* CORSAIR VOID PRO Wireless Gaming Headset
+* CORSAIR VOID RGB 
+* CORSAIR VOID RGB Elite 
+* CORSAIR VOID PRO 
+* CORSAIR HS70 
+* CORSAIR HS70 PRO 
 
 Let me know if you have another Headset that works with this overlay. 
 
