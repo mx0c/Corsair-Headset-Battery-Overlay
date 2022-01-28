@@ -40,7 +40,7 @@ namespace VoidProOverlay
             preConfigs = new PredefinedConfigs();
 
             displayKeyHook = new KeyboardHook(this, VirtualKeyCodes.B, ModifierKeyCodes.Control, 0);
-            displayKeyHook.Triggered += DisplayRequested;
+            displayKeyHook.Triggered += ToggleVisibility;
 
             exitKeyHook = new KeyboardHook(this, VirtualKeyCodes.X, ModifierKeyCodes.Alt, 1);
             exitKeyHook.Triggered += ExitRequested;
